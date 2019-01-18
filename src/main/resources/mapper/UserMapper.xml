@@ -3,4 +3,23 @@
 
 <mapper namespace="com.iscas.workingdiarys.mapper.UserMapper">
 
+    <resultMap id="user" type="com.iscas.workingdiarys.entity.User">
+        <id column="user_id" property="userId"/>
+        <result column="user_name" property="userName"/>
+        <result column="user_sex" property="userSex"/>
+        <result column="project_team" property="projectTeam"/>
+        <result column="user_position" property="userPosition"/>
+        <result column="cert_no" property="certNo"/>
+        <result column="role_id" property="roleId"/>
+        <result column="register_time" property="registerTime"/>
+    </resultMap>
+
+    <select id="selectOne" parameterType="String" resultMap="user">
+        select* from t_user
+        <where>
+            <if test="userName != null and userName != ''">
+                user_name=#{userName}
+            </if>
+        </where>
+    </select>
 </mapper>
