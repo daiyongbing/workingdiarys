@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.config.JmsListenerContainerFactory;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.jms.ConnectionFactory;
 import javax.jms.Queue;
@@ -29,6 +30,12 @@ public class WorkingdiarysApplication {
     public Queue queue(){
         return new ActiveMQQueue("test1.queue");
     }
+
+    @Bean
+    BCryptPasswordEncoder bCryptPasswordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
     public static void main(String[] args) {
         SpringApplication.run(WorkingdiarysApplication.class, args);
     }
