@@ -1,7 +1,9 @@
 package com.iscas.workingdiarys.controller;
 
 import com.iscas.workingdiarys.entity.User;
+import com.iscas.workingdiarys.service.JmsProducerService;
 import com.iscas.workingdiarys.service.UserService;
+import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.jms.Destination;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -51,5 +54,31 @@ public class UserController {
             //JsonResult.resultJson(response, request, ResponseStatus.SERVER_ERROR,  new ResultData("服务器异常"));
         }
         return checkUser;
+    }
+
+
+    @Autowired
+    private JmsProducerService producerService;
+    /**
+     * 功能描述：微信支付回调接口
+     * @param msg 支付信息
+     * @return
+     */
+    @GetMapping("test2")
+    public Object test2(String msg){
+
+        Destination destination = new ActiveMQQueue("test2.queue");
+
+        producerService.sendMessage(destination, msg);
+
+        return "Success";
+    }
+
+
+
+    @GetMapping("test1")
+    public Object test1(String msg){
+        producerService.sendMessage(msg);
+        return "Success";
     }
 }

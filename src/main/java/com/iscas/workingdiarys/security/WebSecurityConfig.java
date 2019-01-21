@@ -26,6 +26,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/user/register").permitAll() //开放注册接口
                 .antMatchers(HttpMethod.GET, "/user/checkname","/user/checkid").permitAll() //开放验证接口
+                .antMatchers(HttpMethod.GET, "/user/test1").permitAll() //开放验证接口
+                .antMatchers(HttpMethod.GET, "/user/test2").permitAll() //开放验证接口
                 .antMatchers("/admin").hasRole("ADMIN") // 只有管理员能访问/admin/**
                 .anyRequest()
                 .authenticated(); //所有接口都必须经过身份验证

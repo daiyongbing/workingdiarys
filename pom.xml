@@ -77,14 +77,24 @@
         </dependency>
 
 
+        <!-- 整合消息队列ActiveMQ -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-activemq</artifactId>
+        </dependency>
+        <!-- activemq线程池 -->
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-pool</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.messaginghub</groupId>
+            <artifactId>pooled-jms</artifactId>
+            <version>1.0.3</version>
+        </dependency>
 
     </dependencies>
-
-
-
-
-
-
 
     <build>
         <plugins>
