@@ -14,11 +14,32 @@
         <result column="register_time" property="registerTime"/>
     </resultMap>
 
+    <resultMap id="userDetails" type="com.iscas.workingdiarys.entity.CustomUserDetails">
+        <id column="user_name" property="username"/>
+        <id column="password" property="password"/>
+        <collection property="roles" ofType="com.iscas.workingdiarys.entity.Role">
+            <id column="role_id" property="roleId"/>
+            <id column="role_name" property="roleName"/>
+        </collection>
+    </resultMap>
+
     <select id="selectOne" parameterType="String" resultMap="user">
         select* from t_user
         <where>
             <if test="userName != null and userName != ''">
                 user_name=#{userName}
+            </if>
+        </where>
+    </select>
+
+    <select id="findByUserName" parameterType="String" resultMap="userDetails">
+        select u.user_name, u.password, r.role_name
+        from t_user u
+        left join t_role r
+        on u.role_id=r.role_id
+        <where>
+            <if test="userName != null and userName != '' ">
+                u.user_name=#{userName}
             </if>
         </where>
     </select>

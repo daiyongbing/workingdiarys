@@ -17,7 +17,7 @@ import java.util.Date;
  * @Version:        1.0
  */
 public class JWTTokenUtil {
-    private static InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("mykeystore_1.jks");
+    private static InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("sys_jks/mykeystore_1.jks");
     private static PrivateKey privateKey = null;
     private static PublicKey publicKey = null;
     private static Long expirationSeconds = 1000*60*30L;
