@@ -48,11 +48,38 @@ public class UserController {
         }
         User checkUser = null;
         try {
-            checkUser = userService.selectOne(userName);  //验证用户名
+            checkUser = userService.selectOneByName(userName);  //验证用户名
             if (checkUser == null){
                 ResponseJson.jsonResult(response, request, ResponseStatus.SUCCESS, new ResponseData(200,"用户名可用"));
             } else {
                 ResponseJson.jsonResult(response, request, ResponseStatus.DB_ALREADY_EXIST_ERROR, new ResponseData(ResponseStatus.DB_ALREADY_EXIST_ERROR,"用户已存在"));
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            ResponseJson.jsonResult(response, request, ResponseStatus.SERVER_ERROR, new ResponseData(ResponseStatus.SERVER_ERROR,"服务器异常"));
+        }
+    }
+
+    /**
+     * @Description 验证userid是否已被注册
+     * @author      daiyongbing
+     * @param       userId
+     * @return
+     * @date        2019/1/22
+     */
+    @GetMapping(value = "checkid", produces = MediaType.APPLICATION_JSON_VALUE)
+    public void checkUserId(HttpServletResponse response, HttpServletRequest request, @RequestParam String userId){
+        if (userId == null || "".equals(userId)){
+            ResponseJson.jsonResult(response, request, ResponseStatus.CLIENT_INVALIED_PARAM, new ResponseData(ResponseStatus.CLIENT_INVALIED_PARAM,"参数不能为空"));
+            return;
+        }
+        User checkUser = null;
+        try {
+            checkUser = userService.selectOneById(userId);  //验证用户ID
+            if (checkUser == null){
+                ResponseJson.jsonResult(response, request, ResponseStatus.SUCCESS, new ResponseData(200,"ID可用"));
+            } else {
+                ResponseJson.jsonResult(response, request, ResponseStatus.DB_ALREADY_EXIST_ERROR, new ResponseData(ResponseStatus.DB_ALREADY_EXIST_ERROR,"ID已存在"));
             }
         } catch (Exception e){
             e.printStackTrace();

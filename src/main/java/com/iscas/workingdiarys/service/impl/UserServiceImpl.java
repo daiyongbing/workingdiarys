@@ -22,8 +22,13 @@ public class UserServiceImpl implements UserService {
      * @date        2019/1/22
      */
     @Override
-    public User selectOne(String userName) {
+    public User selectOneByName(String userName) {
 
-        return userMapper.selectOne(userName);
+        return userMapper.selectOneByName(userName);
+    }
+
+    @Override
+    public User selectOneById(String userId) {
+        return userMapper.selectOneById(userId);
     }
 }
