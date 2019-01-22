@@ -23,11 +23,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User selectOne(String userName) {
-        List<User> userList = userMapper.selectList(userName);
-        if (userList.isEmpty()){
-            return null;
-        }else {
-            return userList.get(0);
-        }
+
+        return userMapper.selectOne(userName);
     }
 }

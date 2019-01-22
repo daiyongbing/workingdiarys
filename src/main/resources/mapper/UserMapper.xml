@@ -23,6 +23,16 @@
         </collection>
     </resultMap>
 
+    <select id="selectOne" parameterType="String" resultType="User">
+        select* from t_user
+        <where>
+            <if test="userName != null and userName != ''">
+                user_name=#{userName}
+            </if>
+        </where>
+        limit 1;
+    </select>
+
     <select id="selectList" parameterType="String" resultMap="user">
         select* from t_user
         <where>
