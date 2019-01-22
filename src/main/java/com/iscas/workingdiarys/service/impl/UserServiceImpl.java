@@ -7,14 +7,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
     @Resource
     private UserMapper userMapper;
 
+    /**
+     * @Description 返回第一条满足条件的记录
+     * @author      daiyongbing
+     * @param       userName
+     * @return      User
+     * @date        2019/1/22
+     */
     @Override
     public User selectOne(String userName) {
-        return userMapper.selectOne(userName);
+        List<User> userList = userMapper.selectList(userName);
+        if (userList.isEmpty()){
+            return null;
+        }else {
+            return userList.get(0);
+        }
     }
 }

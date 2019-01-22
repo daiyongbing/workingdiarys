@@ -91,6 +91,11 @@ public class ResponseStatus {
      */
     public final static int CLIENT_NO_ACCESS_ERROR = 403;
 
+    /**
+     * 405 无效的参数
+     */
+    public final static int CLIENT_INVALIED_PARAM = 405;
+
 
     /******************************** 500系列：应用服务器异常 ********************************/
 

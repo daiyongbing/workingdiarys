@@ -23,7 +23,7 @@
         </collection>
     </resultMap>
 
-    <select id="selectOne" parameterType="String" resultMap="user">
+    <select id="selectList" parameterType="String" resultMap="user">
         select* from t_user
         <where>
             <if test="userName != null and userName != ''">
