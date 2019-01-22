@@ -1,4 +1,4 @@
-package com.iscas.workingdiarys.util.encrypt;
+package com.iscas.workingdiarys.util.encode;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;
