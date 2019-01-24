@@ -43,7 +43,7 @@ public class CertificateUtil {
      * @return      KeyPair
      * @date        2019/1/22
      */
-    public KeyPair generateKeyPair(){
+    public static KeyPair generateKeyPair(){
         ECGenParameterSpec ecGenParameterSpec = new ECGenParameterSpec(ALGORITHM_CURVE_SECP256K1);
         KeyPairGenerator keyPairGenerator = null;
         try {
@@ -72,7 +72,7 @@ public class CertificateUtil {
      * @return      X509Certificate
      * @date        2019/1/22
      */
-    public X509Certificate generateCert(String[] certInfo, KeyPair keyPair) {
+    public static X509Certificate generateCert(String[] certInfo, KeyPair keyPair) {
         X509V3CertificateGenerator cerGenerator = new X509V3CertificateGenerator();
         X509Certificate cert = null;
         cerGenerator.setSerialNumber(new BigInteger(256, new Random()));  // 序列号
@@ -103,7 +103,7 @@ public class CertificateUtil {
      * @return      pemCertString
      * @date        2019/1/22
      */
-    public String getPemCertString(Certificate certificate){
+    public static String getPemCertString(Certificate certificate){
         String encode = null;
         try {
             encode = Base64Util.encode2String(certificate.getEncoded());
@@ -127,7 +127,7 @@ public class CertificateUtil {
      * @param       certName    文件名
      * @date        2019/1/22
      */
-    public void savePemCertAsFile(Certificate certificate, String path, String certName){
+    public static void savePemCertAsFile(Certificate certificate, String path, String certName){
         String encodedCert = null;
         try {
             encodedCert = Base64Util.encode2String(certificate.getEncoded());
@@ -239,7 +239,7 @@ public class CertificateUtil {
      * @param       path jks的存储路径（目录）
      * @date        2019/1/22
      */
-    public void generateNullJKS(String[] certInfo, String jks_password, String path) {
+    public static void generateNullJKS(String[] certInfo, String jks_password, String path) {
         String jks_path = path+"/" + certInfo[0] + ".jks";
         File file = new File(jks_path);
         if (!file.getParentFile().exists()){
@@ -264,7 +264,7 @@ public class CertificateUtil {
      * @param       commonName
      * @date        2019/1/22
      */
-    public void addCert2JKS(X509Certificate cert, KeyPair keyPair, String jks_password, String path, String commonName) {
+    public static void addCert2JKS(X509Certificate cert, KeyPair keyPair, String jks_password, String path, String commonName) {
         KeyStore keyStore;
         try {
             keyStore = KeyStore.getInstance("JKS");
@@ -290,7 +290,7 @@ public class CertificateUtil {
      * @param alias
      * @date        2019/1/22
      */
-    public void generateJksWithCert(X509Certificate cert, KeyPair keyPair, String jks_password, String path, String alias){
+    public static void generateJksWithCert(X509Certificate cert, KeyPair keyPair, String jks_password, String path, String alias){
         KeyStore keyStore;
         String jks_path = path + "/" + alias + ".jks";
         File file = new File(jks_path);
@@ -326,7 +326,7 @@ public class CertificateUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return Base64Util.encode2String(privateKeyBytes);   // base464编码成字符串
+        return Base64Util.encode2String(privateKeyBytes);   // base64编码成字符串
     }
 
     /**
@@ -374,7 +374,7 @@ public class CertificateUtil {
      * @param pemCert
      * @return
      */
-    public X509Certificate getCertificateFromPem(String pemCert) {
+    public static X509Certificate getCertificateFromPem(String pemCert) {
         CertificateFactory certificateFactory;
         try {
             certificateFactory = CertificateFactory.getInstance("X.509");
