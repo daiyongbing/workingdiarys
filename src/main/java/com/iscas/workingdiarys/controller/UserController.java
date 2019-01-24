@@ -100,7 +100,7 @@ public class UserController {
             ResponseJson.jsonResult(response, request, ResponseStatus.SERVER_ERROR, new ResponseData(ResponseStatus.SERVER_ERROR,"服务器异常"));
         }
     }
-    
+
     /**
      * @Description 注册接口，当发生异常时必须做数据库事物回滚，保证数据的有效性
      * @author      daiyongbing
