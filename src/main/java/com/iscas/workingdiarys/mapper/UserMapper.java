@@ -17,4 +17,5 @@ public interface UserMapper {
 
     CustomUserDetails findByUserName(@Param("userName") String username);
 
+    void insert(User user);
 }

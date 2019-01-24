@@ -1,22 +1,32 @@
 package com.iscas.workingdiarys.controller;
 
+import com.alibaba.fastjson.JSONObject;
+import com.iscas.workingdiarys.entity.Cert;
+import com.iscas.workingdiarys.entity.CertInfo;
 import com.iscas.workingdiarys.entity.ResponseStatus;
 import com.iscas.workingdiarys.entity.User;
 import com.iscas.workingdiarys.service.JmsProducerService;
+import com.iscas.workingdiarys.service.PropertiesService;
 import com.iscas.workingdiarys.service.UserService;
+import com.iscas.workingdiarys.util.cert.CertUtil;
 import com.iscas.workingdiarys.util.httpresponse.ResponseData;
 import com.iscas.workingdiarys.util.httpresponse.ResponseJson;
 import org.apache.activemq.command.ActiveMQQueue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.web.bind.annotation.*;
 
 import javax.jms.Destination;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 
 /**
  * @Description:    UserController
@@ -27,9 +37,13 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+    Logger logger = LoggerFactory.getLogger(getClass());
 
    @Autowired
    private UserService userService;
+
+   @Autowired
+   private PropertiesService propertiesService;
 
 
     /**
@@ -84,6 +98,40 @@ public class UserController {
         } catch (Exception e){
             e.printStackTrace();
             ResponseJson.jsonResult(response, request, ResponseStatus.SERVER_ERROR, new ResponseData(ResponseStatus.SERVER_ERROR,"服务器异常"));
+        }
+    }
+    
+    /**
+     * @Description 注册接口，当发生异常时必须做数据库事物回滚，保证数据的有效性
+     * @author      daiyongbing
+     * @param       usercertJson 包含用户注册信息以及证书生成信息
+     * @date        2019/1/24
+     */
+    @PostMapping(value = "register", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Transactional(rollbackFor = Exception.class)
+    public void register(HttpServletResponse response, HttpServletRequest request, @RequestBody JSONObject usercertJson){
+        Cert cert = null;
+        User user;
+        JSONObject certJson = usercertJson.getJSONObject("certInfo");
+        try{
+            user = usercertJson.getJSONObject("userInfo").toJavaObject(User.class);
+            if (certJson != null && certJson.size()>0){
+                cert = CertUtil.genCert(certJson.toJavaObject(CertInfo.class), propertiesService.getJksPath(), propertiesService.getCertPath());
+                cert.setUserName(user.getUserName());
+                user.setCertNo(cert.getCertNo());
+            }
+            user.setRegisterTime(new Timestamp(System.currentTimeMillis()));
+            userService.register(user, cert);
+            ResponseJson.jsonResult(response, request, ResponseStatus.SUCCESS, new ResponseData(200, "注册成功"));
+        } catch (DuplicateKeyException de){
+            System.err.println(de.getCause());
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            ResponseJson.jsonResult(response, request, ResponseStatus.DB_ALREADY_EXIST_ERROR, new ResponseData(309, "用户已存在"));
+            return;
+        } catch (Exception e){
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            ResponseJson.jsonResult(response, request, ResponseStatus.SERVER_ERROR, new ResponseData(500, "服务器异常"));
         }
     }
 

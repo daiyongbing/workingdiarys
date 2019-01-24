@@ -13,6 +13,10 @@
 
     <typeAliases>
         <typeAlias type="com.iscas.workingdiarys.entity.User" alias="User"/>
+        <typeAlias type="com.iscas.workingdiarys.entity.Cert" alias="Cert"/>
+        <typeAlias type="com.iscas.workingdiarys.entity.Role" alias="Role"/>
+        <typeAlias type="com.iscas.workingdiarys.entity.CustomUserDetails" alias="CustomUserDetails"/>
+
         <typeAlias type="java.util.List" alias="List"/>
         <typeAlias type="java.util.HashMap" alias="HashMap"/>
         <typeAlias type="java.lang.String" alias="String"/>
@@ -33,6 +37,7 @@
 
     <mappers>
         <mapper class="com.iscas.workingdiarys.mapper.UserMapper"></mapper>
+        <mapper class="com.iscas.workingdiarys.mapper.CertMapper"></mapper>
     </mappers>
 
 </configuration>

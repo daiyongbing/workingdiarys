@@ -3,7 +3,7 @@
 
 <mapper namespace="com.iscas.workingdiarys.mapper.UserMapper">
 
-    <resultMap id="user" type="com.iscas.workingdiarys.entity.User">
+    <resultMap id="user" type="User">
         <id column="user_id" property="userId"/>
         <result column="user_name" property="userName"/>
         <result column="user_sex" property="userSex"/>
@@ -14,14 +14,21 @@
         <result column="register_time" property="registerTime"/>
     </resultMap>
 
-    <resultMap id="userDetails" type="com.iscas.workingdiarys.entity.CustomUserDetails">
+    <resultMap id="userDetails" type="CustomUserDetails">
         <id column="user_name" property="username"/>
         <id column="password" property="password"/>
-        <collection property="roles" ofType="com.iscas.workingdiarys.entity.Role">
+        <collection property="roles" ofType="Role">
             <id column="role_id" property="roleId"/>
             <id column="role_name" property="roleName"/>
         </collection>
     </resultMap>
+
+    <insert id="insert" parameterType="User">
+        insert into t_user
+            (user_id, user_name, user_sex, project_team, user_position, leader, role_id, password,cert_no)
+        values
+            (#{userId}, #{userName}, #{userSex}, #{projectTeam}, #{userPosition}, #{leader}, #{roleId}, #{password}, #{certNo})
+    </insert>
 
     <select id="selectOneByName" parameterType="String" resultType="User">
         select* from t_user

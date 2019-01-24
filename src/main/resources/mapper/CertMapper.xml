@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iscas.workingdiarys.mapper.CertMapper">
+    <resultMap id="cert" type="com.iscas.workingdiarys.entity.Cert">
+        <id column="user_name" property="userName"/>
+        <id column="cert_no" property="certNo"/>
+        <result column="common_name" property="commonName"/>
+        <result column="pem_cert" property="pemCert"/>
+        <result column="cert_info" property="certInfo"/>
+        <result column="cert_addr" property="certAddr"/>
+        <result column="cert_status" property="certStatus"/>
+        <result column="cert_level" property="certLevel"/>
+        <result column="private_key" property="privateKey"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="Cert">
+        insert into t_cert
+            (user_name, cert_no, pem_cert, cert_info, cert_addr, cert_status, cert_level, private_key, common_name,create_time)
+        VALUES
+            (#{userName}, #{certNo},#{pemCert}, #{certInfo}, #{certAddr}, #{certStatus}, #{certLevel},#{privateKey},#{commonName},#{createTime})
+    </insert>
+
+</mapper>
