@@ -15,9 +15,11 @@ public interface UserMapper {
 
     List<User> selectList(@Param("userName") String username);
 
-    CustomUserDetails findByUserName(@Param("userName") String username);
+    CustomUserDetails findByUserName(@Param("userName") String userName);
 
     void insert(User user);
 
     void update(User user);
+
+    void changePassword(@Param("userName") String userName, @Param("newPassword") String newPassword);
 }

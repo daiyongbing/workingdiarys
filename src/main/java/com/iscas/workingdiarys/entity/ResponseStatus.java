@@ -97,6 +97,12 @@ public class ResponseStatus {
     public final static int CLIENT_INVALIED_PARAM = 405;
 
 
+    /**
+     * 406 错误密码
+     */
+    public final static int CLIENT_INVALIED_PASSWORD = 406;
+
+
     /******************************** 500系列：应用服务器异常 ********************************/
 
     /**

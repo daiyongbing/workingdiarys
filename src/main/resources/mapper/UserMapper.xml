@@ -82,4 +82,12 @@
         </set>
         where user_name=#{userName}
     </update>
+
+    <update id="changePassword">
+        update t_user
+        <set>
+            <if test="newPassword != null and newPassword != ''">password=#{newPassword}</if>
+        </set>
+        where user_name=#{userName};
+    </update>
 </mapper>

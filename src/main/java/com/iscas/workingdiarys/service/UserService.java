@@ -11,4 +11,6 @@ public interface UserService {
     void register(User user, Cert cert) throws Exception;
 
     void updateUser(User user) throws Exception;
+
+    void changePassword(String userName, String newPassword);
 }

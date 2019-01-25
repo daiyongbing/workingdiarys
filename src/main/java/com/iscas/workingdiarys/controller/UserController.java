@@ -166,6 +166,34 @@ public class UserController {
         }
     }
 
+    /**
+     * @Description 修改密码，验证原密码修改，以后可能会验证手机短信
+     * @author      daiyongbing
+     * @param       jsonObject
+     * @date        2019/1/25
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @PostMapping(value = "password/change", produces = MediaType.APPLICATION_JSON_VALUE)
+    public void modifyPassword(HttpServletRequest request, HttpServletResponse response, @RequestBody JSONObject jsonObject){
+        String oldPassword = jsonObject.getString("oldPassword");
+        String newPassword = jsonObject.getString("newPassword");
+        String authHead = request.getHeader("Authorization");
+        String userName = JWTTokenUtil.parseToken(authHead).getSubject();
+        try {
+            User user = userService.selectOneByName(userName);
+            if (bCryptPasswordEncoder.matches(oldPassword, user.getPassword())){
+                userService.changePassword(userName, newPassword);
+                ResponseJson.jsonResult(response, request, ResponseStatus.SUCCESS, "success");
+            } else {
+                ResponseJson.jsonResult(response, request, ResponseStatus.CLIENT_INVALIED_PASSWORD, "密码验证错误");
+            }
+        }catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //事物回滚
+            System.err.println(e.getCause().getMessage());
+            ResponseJson.jsonResult(response, request, ResponseStatus.SERVER_ERROR, "服务器异常");
+        }
+    }
+
 
     @Autowired
     private JmsProducerService producerService;
