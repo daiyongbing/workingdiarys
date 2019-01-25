@@ -157,13 +157,13 @@ public class RSACrypt {
         return cipher.doFinal(data);
     }
 
-/**
- * @Description 获取私钥
- * @author      daiyongbing
- * @param       keyMap
- * @return      私钥Base64编码字符串
- * @date        2019/1/24
- */
+    /**
+     * @Description 获取私钥
+     * @author      daiyongbing
+     * @param       keyMap
+     * @return      私钥Base64编码字符串
+     * @date        2019/1/24
+     */
     public static String getPrivateKey(Map<String, Key> keyMap) throws Exception {
         PrivateKey key = (PrivateKey) keyMap.get(PRIVATE_KEY);
         return Base64Util.encode2String(key.getEncoded());
@@ -198,6 +198,7 @@ public class RSACrypt {
     }
 
     public static void main(String[] args) throws Exception {
+        String plaintext = "晚上十点老地方见。";
         Map<String, Key> keyMap = initKey();
         String publicKey = getPublicKey(keyMap);
         String privateKey = getPrivateKey(keyMap);
@@ -208,8 +209,8 @@ public class RSACrypt {
         System.out.println("-----------------------------------");
         System.out.println("privateKey:"+privateKey);
         System.out.println("-----------------------------------");
-        byte[] encryptByPrivateKey = encryptByPrivateKey("123456".getBytes(),privateKey);
-        byte[] encryptByPublicKey = encryptByPublicKey("123456".getBytes(),publicKey);
+        byte[] encryptByPrivateKey = encryptByPrivateKey(plaintext.getBytes(),privateKey);
+        byte[] encryptByPublicKey = encryptByPublicKey(plaintext.getBytes(),publicKey);
         System.out.println("encryptByPrivateKey:"+new String(encryptByPrivateKey));
         System.out.println("-----------------------------------");
         System.out.println("encryptByPublicKey:"+new String(encryptByPublicKey));
