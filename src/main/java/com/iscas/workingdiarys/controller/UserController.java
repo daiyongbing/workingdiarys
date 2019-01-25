@@ -11,12 +11,14 @@ import com.iscas.workingdiarys.service.UserService;
 import com.iscas.workingdiarys.util.cert.CertUtil;
 import com.iscas.workingdiarys.util.httpresponse.ResponseData;
 import com.iscas.workingdiarys.util.httpresponse.ResponseJson;
+import com.iscas.workingdiarys.util.jjwt.JWTTokenUtil;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
@@ -44,6 +46,9 @@ public class UserController {
 
    @Autowired
    private PropertiesService propertiesService;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
     /**
@@ -121,6 +126,7 @@ public class UserController {
                 user.setCertNo(cert.getCertNo());
             }
             user.setRegisterTime(new Timestamp(System.currentTimeMillis()));
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             userService.register(user, cert);
             ResponseJson.jsonResult(response, request, ResponseStatus.SUCCESS, new ResponseData(200, "注册成功"));
         } catch (DuplicateKeyException de){
@@ -132,6 +138,31 @@ public class UserController {
             e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             ResponseJson.jsonResult(response, request, ResponseStatus.SERVER_ERROR, new ResponseData(500, "服务器异常"));
+        }
+    }
+
+    /**
+     * @Description 用户更新资料（注册时间、用户名、用户ID、密码不允许更新）
+     * @author      daiyongbing
+     * @param       user
+     * @param       response
+     * @param       request
+     * @date        2019/1/25
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @PostMapping(value = "update", produces = MediaType.APPLICATION_JSON_VALUE)
+    public void updateUserByName(HttpServletResponse response, HttpServletRequest request, @RequestBody User user){
+        String token = request.getHeader("Authorization");
+        String userName;
+        try{
+            userName = JWTTokenUtil.parseToken(token).getSubject();
+            user.setUserName(userName);
+            userService.updateUser(user);
+            ResponseJson.jsonResult(response, request, ResponseStatus.SUCCESS, "信息已更新");
+        } catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();  //事物回滚
+            System.err.println(e.getCause().getMessage());
+            ResponseJson.jsonResult(response, request, ResponseStatus.SERVER_ERROR, "服务器异常");
         }
     }
 

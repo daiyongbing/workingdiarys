@@ -9,4 +9,6 @@ public interface UserService {
     User selectOneById(String userId);
 
     void register(User user, Cert cert) throws Exception;
+
+    void updateUser(User user) throws Exception;
 }

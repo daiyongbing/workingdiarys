@@ -8,6 +8,7 @@ import com.iscas.workingdiarys.service.UserService;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -45,5 +46,14 @@ public class UserServiceImpl implements UserService {
             certMapper.insert(cert);
         }
         userMapper.insert(user);
+    }
+
+    @Override
+    public void updateUser(User user) throws Exception{
+        if (user == null){
+            new Exception("没有用户信息");
+            return;
+        }
+        userMapper.update(user);
     }
 }

@@ -70,4 +70,16 @@
             </if>
         </where>
     </select>
+
+    <update id="update" parameterType="User">
+        update t_user
+        <set>
+            <if test="userSex != null and userSex != ''">user_sex=#{userSex},</if>
+            <if test="projectTeam != null and projectTeam != ''">project_team=#{projectTeam},</if>
+            <if test="userPosition != null and userPosition != ''">user_position=#{userPosition},</if>
+            <if test="leader != null and leader != ''">leader=#{leader},</if>
+            <if test="certNo != null and certNo != ''">cert_no=#{certNo}</if>
+        </set>
+        where user_name=#{userName}
+    </update>
 </mapper>
