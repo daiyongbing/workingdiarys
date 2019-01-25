@@ -33,8 +33,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         userInfo.setAuthorities(authoritiesSet);
         return userInfo;*/
 
-        log.info("loadUserByUsername -> username:"+username);
-        if (username == null || username == ""){
+        if (username == null || "".equals(username)){
             return null;
         }
         CustomUserDetails userDetails = userMapper.findByUserName(username);
