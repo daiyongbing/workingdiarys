@@ -1,4 +1,4 @@
-package com.iscas.workingdiarys.jms;
+package com.iscas.workingdiarys.activemq.consumer;
 
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
