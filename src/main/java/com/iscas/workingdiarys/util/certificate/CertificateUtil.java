@@ -3,6 +3,7 @@ package com.iscas.workingdiarys.util.certificate;
 import com.iscas.workingdiarys.util.encrypt.AESCrypt;
 import com.iscas.workingdiarys.util.encode.Base64Util;
 import com.iscas.workingdiarys.util.encrypt.MD5Utils;
+import com.iscas.workingdiarys.util.file.FileUtil;
 import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.x509.X509V3CertificateGenerator;
@@ -15,12 +16,12 @@ import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.security.interfaces.ECPrivateKey;
 import java.security.spec.ECGenParameterSpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Date;
-import java.util.Random;
+import java.util.*;
 
 /**
  * @Description:    java.security.certificate工具类
@@ -206,10 +207,11 @@ public class CertificateUtil {
      * @date        2019/1/22
      */
     public static PrivateKey loadECPrivateKey(String pemPrivateKey,  String algorithm) throws Exception {
-        String privateKeyStr = pemPrivateKey.replace("-----BEGIN PRIVATE KEY-----", "")
-                .replace("-----END PRIVATE KEY-----", "").replace("", "");
-        byte[] asBytes = Base64Util.decode2Bytes(privateKeyStr);
-        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(asBytes);
+        String privateKeyStr = pemPrivateKey.replace("-----BEGIN ENCRYPTED PRIVATE KEY-----", "")
+                .replace("-----END ENCRYPTED PRIVATE KEY-----", "").replace("", "");
+        System.out.println(privateKeyStr);
+        //byte[] asBytes = Base64.getDecoder().decode(privateKeyStr);
+        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(privateKeyStr.getBytes());
         KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
         return keyFactory.generatePrivate(spec);
     }
@@ -479,5 +481,45 @@ public class CertificateUtil {
 
         buffer.flush();
         return buffer.toByteArray();
+    }
+
+    /**
+     * 从jks文件中加载证书
+     * @param jks_file
+     * @param password
+     * @param alias
+     * @return
+     */
+    public static List getCertFromJKS(File jks_file, String password, String alias) {
+        try {
+            KeyStore store = KeyStore.getInstance(KeyStore.getDefaultType());
+            FileInputStream fis = new FileInputStream(jks_file);
+            char[] pwd = password.toCharArray();
+            store.load(fis, pwd);
+            Key sk = store.getKey(alias, pwd);
+            Certificate cert = store.getCertificate(alias);
+            PrivateKey privateKey = (PrivateKey)sk;
+            List list = new ArrayList();
+            list.add(cert);
+            list.add(privateKey);
+            list.add(cert.getPublicKey());
+            return list;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+
+    public static void main(String[] args){
+        String pmePrivate = FileUtil.readStringFromFile("C:\\Users\\vic\\Desktop\\2.pkcs8");
+        System.out.println(pmePrivate);
+        ECPrivateKey ecPrivateKey = null;
+        try {
+            ecPrivateKey = (ECPrivateKey) loadECPrivateKey(pmePrivate, "DSA");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(ecPrivateKey.getAlgorithm());
     }
 }

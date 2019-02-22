@@ -1,6 +1,6 @@
-package com.iscas.workingdiarys.service.impl;
+package com.iscas.workingdiarys.activemq.service;
 
-import com.iscas.workingdiarys.service.JmsProducerService;
+import com.iscas.workingdiarys.activemq.service.JmsProducerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,6 @@ public class JmsProducerServiceImp implements JmsProducerService {
         jmsTemplate.convertAndSend(message);
     }
 
-
 //=======发布订阅相关代码=========
 
     @Autowired
@@ -36,6 +35,5 @@ public class JmsProducerServiceImp implements JmsProducerService {
     public void publish(String msg) {
         jmsTemplate.convertAndSend(this.topic, msg);
     }
-
 
 }

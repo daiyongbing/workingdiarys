@@ -32,6 +32,8 @@ public class RbacAuthorityService {
             urls.add("/user/**"); // 这些 url 都是要登录后才能访问，且其他的 url 都不能访问！
             urls.add("/admin/**");
             urls.add("/cert/**");
+            urls.add("/authorize/**");
+            urls.add("/sse/**");
             AntPathMatcher antPathMatcher = new AntPathMatcher();
 
             for (String url : urls) {

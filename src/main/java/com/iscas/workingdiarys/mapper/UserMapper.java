@@ -22,4 +22,13 @@ public interface UserMapper {
     void update(User user);
 
     void changePassword(@Param("userName") String userName, @Param("newPassword") String newPassword);
+
+
+    /************************以下接口纯属测试，没什么卵用********************/
+
+    void putProof(@Param("txid") String txid, @Param("userName") String userName, @Param("cipherText") String cipherText, @Param("privateKey") String privateKey, @Param("publicKey") String publicKey);
+
+    String exist(@Param("userName") String userName);
+
+    String getData(@Param("txid") String txid);
 }

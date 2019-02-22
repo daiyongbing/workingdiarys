@@ -90,4 +90,24 @@
         </set>
         where user_name=#{userName};
     </update>
+
+    <!--  以下所有内容均只作为测试 -->
+    <insert id="putProof">
+        insert into t_chain
+            (t_id, user_name, crypted_text, private_key, public_key)
+        values
+            (#{txid}, #{userName}, #{cipherText}, #{privateKey}, #{publicKey})
+    </insert>
+
+    <select id="exist" parameterType="String" resultType="String">
+        select private_key from t_chain
+        where user_name=#{userName}
+    </select>
+
+    <select id="getData" parameterType="String" resultType="String">
+        select crypted_text from t_chain
+        <where>
+            <if test="txid != null and txid != ''">t_id=#{txid}</if>
+        </where>
+    </select>
 </mapper>

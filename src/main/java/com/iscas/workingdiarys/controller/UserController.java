@@ -5,8 +5,8 @@ import com.iscas.workingdiarys.entity.Cert;
 import com.iscas.workingdiarys.entity.CertInfo;
 import com.iscas.workingdiarys.entity.ResponseStatus;
 import com.iscas.workingdiarys.entity.User;
-import com.iscas.workingdiarys.service.JmsProducerService;
-import com.iscas.workingdiarys.service.PropertiesService;
+import com.iscas.workingdiarys.activemq.service.JmsProducerService;
+import com.iscas.workingdiarys.config.SystemProperties;
 import com.iscas.workingdiarys.service.UserService;
 import com.iscas.workingdiarys.util.cert.CertUtil;
 import com.iscas.workingdiarys.util.httpresponse.ResponseData;
@@ -26,8 +26,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.jms.Destination;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 
 /**
@@ -38,6 +36,7 @@ import java.sql.Timestamp;
  */
 @RestController
 @RequestMapping("/user")
+
 public class UserController {
     Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -45,7 +44,7 @@ public class UserController {
    private UserService userService;
 
    @Autowired
-   private PropertiesService propertiesService;
+   private SystemProperties propertiesService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;

@@ -61,4 +61,24 @@ public class UserServiceImpl implements UserService {
     public void changePassword(String userName, String newPassword) {
         userMapper.changePassword(userName, newPassword);
     }
+
+    @Override
+    public void putProof(String txid, String userName, String cipherText,  String privateKey, String publicKey) {
+        userMapper.putProof(txid, userName, cipherText,  privateKey, publicKey);
+    }
+
+    @Override
+    public boolean existUser(String userName) {
+        if (userMapper.exist(userName) == null){
+            return false;
+        }else return true;
+    }
+
+    @Override
+    public String getData(String txid) {
+        if (txid==null || "".equals("")){
+            new Exception("txid不能为空");
+        }
+        return userMapper.getData(txid);
+    }
 }

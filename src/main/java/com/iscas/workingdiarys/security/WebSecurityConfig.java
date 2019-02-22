@@ -61,6 +61,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/user/checkname","/user/checkid").permitAll() //开放验证接口
                 .antMatchers(HttpMethod.GET, "/user/test1","/user/test2").permitAll() //开放验证接口
                 .antMatchers("/admin").hasRole("ADMIN") // 只有管理员能访问/admin/**
+                .antMatchers("/authorize/**").permitAll()
+                .antMatchers("/sse/**").permitAll()
+                .antMatchers("/index.html").permitAll()
                 .anyRequest()
                 .access("@rbacauthorityservice.hasPermission(request,authentication)") // RBAC 动态 url 认证
                 //.authenticated() //所有接口都必须经过身份验证

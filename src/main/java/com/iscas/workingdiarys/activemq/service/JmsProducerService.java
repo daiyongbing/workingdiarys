@@ -1,4 +1,4 @@
-package com.iscas.workingdiarys.service;
+package com.iscas.workingdiarys.activemq.service;
 
 import javax.jms.Destination;
 
@@ -22,4 +22,5 @@ public interface JmsProducerService {
      * @param msg
      */
     public void publish(String msg);
+
 }

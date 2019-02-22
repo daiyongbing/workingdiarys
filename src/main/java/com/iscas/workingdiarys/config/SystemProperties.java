@@ -1,4 +1,4 @@
-package com.iscas.workingdiarys.service;
+package com.iscas.workingdiarys.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
  * @Version:        1.0
  */
 @Service
-public class PropertiesService {
+public class SystemProperties {
     @Value("${cer.path}")
     private String certPath;
 

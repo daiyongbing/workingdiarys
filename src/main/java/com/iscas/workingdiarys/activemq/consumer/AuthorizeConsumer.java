@@ -4,9 +4,9 @@ import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Test2Consumer {
-    @JmsListener(destination="test2.queue")
+public class AuthorizeConsumer {
+    @JmsListener(destination="authorization.queue")
     public void receiveQueue(String text){
-        System.out.println("Test2Consumer收到消息:"+text);
+        System.out.println("AuthorizeConsumer收到消息:"+text);
     }
 }
